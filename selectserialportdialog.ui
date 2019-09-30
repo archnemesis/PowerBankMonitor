@@ -7,11 +7,11 @@
     <x>0</x>
     <y>0</y>
     <width>303</width>
-    <height>94</height>
+    <height>109</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Select Serial Port</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>

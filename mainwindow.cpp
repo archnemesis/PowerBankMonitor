@@ -175,6 +175,12 @@ void MainWindow::on_serialPortReadyRead()
                                             static_cast<double>(packet.current) / 1000.0,
                                                 5, 'f', 2));
 
+                    for (int i = 0; i < 6; i++) {
+                        qreal v = static_cast<qreal>(packet.cell_voltage[i]) / 1000.0;
+                        if (m_cellBalanceStatusForm != nullptr) {
+                            m_cellBalanceStatusForm->setCellVoltage(i, v);
+                        }
+                    }
 
                     switch (packet.mode) {
                     case MODE_DISCHARGING:

@@ -27,7 +27,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QProgressBar" name="progressBar">
+      <widget class="QProgressBar" name="pgbCellVoltage1">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
          <horstretch>0</horstretch>
@@ -46,7 +46,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="label_2">
+      <widget class="QLabel" name="lblCellVoltage1">
        <property name="text">
         <string>0.0 V</string>
        </property>
@@ -70,7 +70,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QProgressBar" name="progressBar_2">
+      <widget class="QProgressBar" name="pgbCellVoltage2">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
          <horstretch>0</horstretch>
@@ -89,7 +89,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="label_4">
+      <widget class="QLabel" name="lblCellVoltage2">
        <property name="text">
         <string>0.0 V</string>
        </property>
@@ -113,7 +113,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QProgressBar" name="progressBar_3">
+      <widget class="QProgressBar" name="pgbCellVoltage3">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
          <horstretch>0</horstretch>
@@ -132,7 +132,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="label_6">
+      <widget class="QLabel" name="lblCellVoltage3">
        <property name="text">
         <string>0.0 V</string>
        </property>
@@ -156,7 +156,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QProgressBar" name="progressBar_4">
+      <widget class="QProgressBar" name="pgbCellVoltage4">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
          <horstretch>0</horstretch>
@@ -175,7 +175,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="label_8">
+      <widget class="QLabel" name="lblCellVoltage4">
        <property name="text">
         <string>0.0 V</string>
        </property>
@@ -199,7 +199,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QProgressBar" name="progressBar_5">
+      <widget class="QProgressBar" name="pgbCellVoltage5">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
          <horstretch>0</horstretch>
@@ -218,7 +218,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="label_10">
+      <widget class="QLabel" name="lblCellVoltage5">
        <property name="text">
         <string>0.0 V</string>
        </property>
@@ -242,7 +242,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QProgressBar" name="progressBar_6">
+      <widget class="QProgressBar" name="pgbCellVoltage6">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
          <horstretch>0</horstretch>
@@ -261,7 +261,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="label_12">
+      <widget class="QLabel" name="lblCellVoltage6">
        <property name="text">
         <string>0.0 V</string>
        </property>

@@ -14,6 +14,7 @@ class CellMonitorDialog : public QDialog
 public:
     explicit CellMonitorDialog(QWidget *parent = nullptr);
     ~CellMonitorDialog();
+    void setCellVoltage(int cell, qreal voltage);
 
 private:
     Ui::CellMonitorDialog *ui;
