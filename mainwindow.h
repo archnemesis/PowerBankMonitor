@@ -1,6 +1,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "cellbalancestatusform.h"
+
 #include <QMainWindow>
 #include <QSerialPort>
 #include <QByteArray>
@@ -38,8 +40,15 @@ private slots:
     void on_chkChargeAxisVisible_stateChanged(int state);
     void on_chkTemperatureAxisVisible_stateChanged(int state);
 
+    void on_actClearData_triggered();
+
+    void on_actSaveData_triggered();
+
+    void on_actCellBalancing_triggered();
+
 private:
     Ui::MainWindow *ui;
+    QWidget *m_cellBalanceStatusForm = nullptr;
     QSerialPort *m_serialPort = nullptr;
     QTimer *m_sleepTimer = nullptr;
     QChart *m_chart = nullptr;

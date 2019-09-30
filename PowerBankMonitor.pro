@@ -27,16 +27,19 @@ CONFIG += c++11
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    selectserialportdialog.cpp
+    selectserialportdialog.cpp \
+    cellbalancestatusform.cpp
 
 HEADERS += \
         mainwindow.h \
     selectserialportdialog.h \
-    statuspacket.h
+    statuspacket.h \
+    cellbalancestatusform.h
 
 FORMS += \
         mainwindow.ui \
-    selectserialportdialog.ui
+    selectserialportdialog.ui \
+    cellbalancestatusform.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

@@ -8,6 +8,9 @@
 #include <QDebug>
 #include <QMessageBox>
 #include <QAbstractButton>
+#include <QFile>
+#include <QDataStream>
+#include <QFileDialog>
 
 #include <QtCharts/QChartView>
 
@@ -172,31 +175,6 @@ void MainWindow::on_serialPortReadyRead()
                                             static_cast<double>(packet.current) / 1000.0,
                                                 5, 'f', 2));
 
-                    ui->lneCellVolts1->setText(
-                                QString("%1").arg(
-                                            static_cast<double>(packet.cell_voltage[0]) / 1000.0,
-                                                6, 'f', 4));
-                    ui->lneCellVolts2->setText(
-                                QString("%1").arg(
-                                            static_cast<double>(packet.cell_voltage[1]) / 1000.0,
-                                                6, 'f', 4));
-                    ui->lneCellVolts3->setText(
-                                QString("%1").arg(
-                                            static_cast<double>(packet.cell_voltage[2]) / 1000.0,
-                                                6, 'f', 4));
-                    ui->lneCellVolts4->setText(
-                                QString("%1").arg(
-                                            static_cast<double>(packet.cell_voltage[3]) / 1000.0,
-                                                6, 'f', 4));
-                    ui->lneCellVolts5->setText(
-                                QString("%1").arg(
-                                            static_cast<double>(packet.cell_voltage[4]) / 1000.0,
-                                                6, 'f', 4));
-                    ui->lneCellVolts6->setText(
-                                QString("%1").arg(
-                                            static_cast<double>(packet.cell_voltage[5]) / 1000.0,
-                                                6, 'f', 4));
-
 
                     switch (packet.mode) {
                     case MODE_DISCHARGING:
@@ -281,4 +259,41 @@ void MainWindow::on_chkTemperatureAxisVisible_stateChanged(int state)
 {
     m_chartSeriesTemperature->setVisible(state);
     m_chartAxisTemperature->setVisible(state);
+}
+
+void MainWindow::on_actClearData_triggered()
+{
+    int result = QMessageBox::question(
+                this,
+                tr("Clear Data"),
+                tr("Do you really want to clear all data from the graph?"));
+
+    if (result == QMessageBox::Accepted) {
+        m_chartSeriesCharge->clear();
+        m_chartSeriesPackVoltage->clear();
+        m_chartSeriesCurrent->clear();
+        m_chartSeriesTemperature->clear();
+    }
+}
+
+void MainWindow::on_actSaveData_triggered()
+{
+    QString fileName = QFileDialog::getSaveFileName(
+                this,
+                tr("Choose a file to save data to"));
+
+    if (!fileName.isEmpty()) {
+        for (int i = 0; i < m_chartSeriesPackVoltage->count(); i++) {
+
+        }
+    }
+}
+
+void MainWindow::on_actCellBalancing_triggered()
+{
+    if (m_cellBalanceStatusForm == nullptr) {
+        m_cellBalanceStatusForm = new CellBalanceStatusForm;
+    }
+    m_cellBalanceStatusForm->show();
+    m_cellBalanceStatusForm->raise();
 }
