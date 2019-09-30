@@ -235,10 +235,10 @@
     <addaction name="actLoadComparisonData"/>
     <addaction name="actClearData"/>
     <addaction name="separator"/>
-    <addaction name="actionPack_Voltage"/>
-    <addaction name="actionCurrent"/>
-    <addaction name="actionCharge_Level"/>
-    <addaction name="actionTemperature"/>
+    <addaction name="actShowHidePackVoltage"/>
+    <addaction name="actShowHideCurrent"/>
+    <addaction name="actShowHideChargeLevel"/>
+    <addaction name="actShowHideTemperature"/>
     <addaction name="separator"/>
     <addaction name="actionSettings"/>
    </widget>
@@ -272,7 +272,7 @@
     <string>Cell Balancing...</string>
    </property>
   </action>
-  <action name="actionPack_Voltage">
+  <action name="actShowHidePackVoltage">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -283,7 +283,7 @@
     <string>Pack Voltage</string>
    </property>
   </action>
-  <action name="actionCurrent">
+  <action name="actShowHideCurrent">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -294,7 +294,7 @@
     <string>Current</string>
    </property>
   </action>
-  <action name="actionCharge_Level">
+  <action name="actShowHideChargeLevel">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -305,7 +305,7 @@
     <string>Charge Level</string>
    </property>
   </action>
-  <action name="actionTemperature">
+  <action name="actShowHideTemperature">
    <property name="checkable">
     <bool>true</bool>
    </property>

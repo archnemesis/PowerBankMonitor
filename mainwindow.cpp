@@ -237,30 +237,6 @@ void MainWindow::updatePlot(QLineSeries *series, double value)
     }
 }
 
-void MainWindow::on_chkPackVoltageAxisVisible_stateChanged(int state)
-{
-    m_chartSeriesPackVoltage->setVisible(state);
-    m_chartAxisPackVoltage->setVisible(state);
-}
-
-void MainWindow::on_chkCurrentAxisVisible_stateChanged(int state)
-{
-    m_chartSeriesCurrent->setVisible(state);
-    m_chartAxisCurrent->setVisible(state);
-}
-
-void MainWindow::on_chkChargeAxisVisible_stateChanged(int state)
-{
-    m_chartSeriesCharge->setVisible(state);
-    m_chartAxisCharge->setVisible(state);
-}
-
-void MainWindow::on_chkTemperatureAxisVisible_stateChanged(int state)
-{
-    m_chartSeriesTemperature->setVisible(state);
-    m_chartAxisTemperature->setVisible(state);
-}
-
 void MainWindow::on_actClearData_triggered()
 {
     int result = QMessageBox::question(
@@ -292,8 +268,33 @@ void MainWindow::on_actSaveData_triggered()
 void MainWindow::on_actCellBalancing_triggered()
 {
     if (m_cellBalanceStatusForm == nullptr) {
-        m_cellBalanceStatusForm = new CellBalanceStatusForm;
+        m_cellBalanceStatusForm = new CellMonitorDialog;
+        m_cellBalanceStatusForm->setModal(false);
     }
     m_cellBalanceStatusForm->show();
     m_cellBalanceStatusForm->raise();
+}
+
+void MainWindow::on_actShowHidePackVoltage_triggered(bool checked)
+{
+    m_chartSeriesPackVoltage->setVisible(checked);
+    m_chartAxisPackVoltage->setVisible(checked);
+}
+
+void MainWindow::on_actShowHideCurrent_triggered(bool checked)
+{
+    m_chartSeriesCurrent->setVisible(checked);
+    m_chartAxisCurrent->setVisible(checked);
+}
+
+void MainWindow::on_actShowHideChargeLevel_triggered(bool checked)
+{
+    m_chartSeriesCharge->setVisible(checked);
+    m_chartAxisCharge->setVisible(checked);
+}
+
+void MainWindow::on_actShowHideTemperature_triggered(bool checked)
+{
+    m_chartSeriesTemperature->setVisible(checked);
+    m_chartAxisTemperature->setVisible(checked);
 }

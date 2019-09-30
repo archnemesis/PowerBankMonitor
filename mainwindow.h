@@ -1,7 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "cellbalancestatusform.h"
+#include "cellmonitordialog.h"
 
 #include <QMainWindow>
 #include <QSerialPort>
@@ -34,21 +34,17 @@ private slots:
     void on_serialPortReadyRead();
     void on_sleepTimerTimeout();
     void on_waitingMessageBoxButtonClicked(QAbstractButton *button);
-
-    void on_chkPackVoltageAxisVisible_stateChanged(int state);
-    void on_chkCurrentAxisVisible_stateChanged(int state);
-    void on_chkChargeAxisVisible_stateChanged(int state);
-    void on_chkTemperatureAxisVisible_stateChanged(int state);
-
     void on_actClearData_triggered();
-
     void on_actSaveData_triggered();
-
     void on_actCellBalancing_triggered();
+    void on_actShowHidePackVoltage_triggered(bool checked);
+    void on_actShowHideCurrent_triggered(bool checked);
+    void on_actShowHideChargeLevel_triggered(bool checked);
+    void on_actShowHideTemperature_triggered(bool checked);
 
 private:
     Ui::MainWindow *ui;
-    QWidget *m_cellBalanceStatusForm = nullptr;
+    CellMonitorDialog *m_cellBalanceStatusForm = nullptr;
     QSerialPort *m_serialPort = nullptr;
     QTimer *m_sleepTimer = nullptr;
     QChart *m_chart = nullptr;

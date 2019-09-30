@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>CellBalanceStatusForm</class>
- <widget class="QWidget" name="CellBalanceStatusForm">
+ <class>CellMonitorDialog</class>
+ <widget class="QDialog" name="CellMonitorDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>249</width>
-    <height>182</height>
+    <width>400</width>
+    <height>300</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>Cell Monitor</string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>

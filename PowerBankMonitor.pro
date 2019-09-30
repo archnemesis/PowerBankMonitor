@@ -28,18 +28,18 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     selectserialportdialog.cpp \
-    cellbalancestatusform.cpp
+    cellmonitordialog.cpp
 
 HEADERS += \
         mainwindow.h \
     selectserialportdialog.h \
     statuspacket.h \
-    cellbalancestatusform.h
+    cellmonitordialog.h
 
 FORMS += \
         mainwindow.ui \
     selectserialportdialog.ui \
-    cellbalancestatusform.ui
+    cellmonitordialog.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
