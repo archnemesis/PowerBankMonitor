@@ -6,6 +6,8 @@
 
 QT       += core gui serialport charts
 
+include (C:/Qwt-6.1.4/features/qwt.prf)
+
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = PowerBankMonitor

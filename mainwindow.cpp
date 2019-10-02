@@ -8,9 +8,9 @@
 #include <QDebug>
 #include <QMessageBox>
 #include <QAbstractButton>
-#include <QFile>
-#include <QDataStream>
 #include <QFileDialog>
+#include <QTextStream>
+#include <QDateTime>
 
 #include <QtCharts/QChartView>
 
@@ -18,19 +18,26 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+    bool dotest = false;
+
     ui->setupUi(this);
 
     m_waitingMessageBox = new QMessageBox(this);
     m_waitingMessageBox->setWindowTitle(tr("Waiting for Pack"));
     m_waitingMessageBox->setText(tr("Wake the pack by pressing the wake button, or by connecting a load or charger."));
-    m_waitingMessageBox->setStandardButtons(QMessageBox::Cancel);
+    m_waitingMessageBox->setStandardButtons(QMessageBox::Ok);
     m_waitingMessageBox->setModal(true);
     connect(m_waitingMessageBox, &QMessageBox::buttonClicked, this, &MainWindow::on_waitingMessageBoxButtonClicked);
 
     m_sleepTimer = new QTimer(this);
-    m_sleepTimer->setInterval(1000);
+    m_sleepTimer->setInterval(2000);
     m_sleepTimer->setSingleShot(true);
     connect(m_sleepTimer, &QTimer::timeout, this, &MainWindow::on_sleepTimerTimeout);
+
+    m_chartUpdateTimer = new QTimer(this);
+    m_chartUpdateTimer->setInterval(1000);
+    m_chartUpdateTimer->setSingleShot(false);
+    connect(m_chartUpdateTimer, &QTimer::timeout, this, &MainWindow::on_chartUpdateTimer_timeout);
 
     QSerialPortInfo selectedPort = SelectSerialPortDialog::getSerialPortInfo(this);
 
@@ -55,14 +62,20 @@ MainWindow::MainWindow(QWidget *parent) :
             m_waitingMessageBox->show();
         }
     }
+    else {
+        dotest = true;
+    }
 
     m_chart = new QChart();
     //m_chart->legend()->setVisible(false);
 
-    m_chartAxisTime = new QValueAxis;
-    m_chartAxisTime->setMin(0);
-    m_chartAxisTime->setMax(100);
-    m_chartAxisTime->setTitleText(tr("Seconds"));
+    m_startDateTime = QDateTime::currentDateTime();
+
+    m_chartAxisTime = new QDateTimeAxis;
+    m_chartAxisTime->setMin(m_startDateTime);
+    m_chartAxisTime->setMax(m_startDateTime.addSecs(300));
+    m_chartAxisTime->setTitleText(tr("Time"));
+    m_chartAxisTime->setFormat("h:mm:ss AP");
     m_chart->addAxis(m_chartAxisTime, Qt::AlignBottom);
 
     m_chartAxisCharge = new QValueAxis;
@@ -97,23 +110,28 @@ MainWindow::MainWindow(QWidget *parent) :
     m_chart->addSeries(m_chartSeriesPackVoltage);
     m_chartSeriesPackVoltage->attachAxis(m_chartAxisPackVoltage);
     m_chartSeriesPackVoltage->attachAxis(m_chartAxisTime);
+    m_chartSeriesPackVoltage->setUseOpenGL(true);
 
     m_chartSeriesCurrent = new QLineSeries;
     m_chart->addSeries(m_chartSeriesCurrent);
     m_chartSeriesCurrent->attachAxis(m_chartAxisCurrent);
     m_chartSeriesCurrent->attachAxis(m_chartAxisTime);
+    m_chartSeriesCurrent->setUseOpenGL(true);
 
     m_chartSeriesCharge = new QLineSeries;
     m_chart->addSeries(m_chartSeriesCharge);
     m_chartSeriesCharge->attachAxis(m_chartAxisCharge);
     m_chartSeriesCharge->attachAxis(m_chartAxisTime);
+    m_chartSeriesCharge->setUseOpenGL(true);
 
     m_chartSeriesTemperature = new QLineSeries;
     m_chart->addSeries(m_chartSeriesTemperature);
     m_chartSeriesTemperature->attachAxis(m_chartAxisTemperature);
     m_chartSeriesTemperature->attachAxis(m_chartAxisTime);
+    m_chartSeriesTemperature->setUseOpenGL(true);
 
     ui->chartView->setChart(m_chart);
+    m_chartUpdateTimer->start();
 }
 
 MainWindow::~MainWindow()
@@ -123,6 +141,25 @@ MainWindow::~MainWindow()
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
+    int result = QMessageBox::question(
+                this,
+                tr("Exit Application"),
+                tr("Do you really want to exit the application?"),
+                QMessageBox::Yes | QMessageBox::No);
+
+    if (result == QMessageBox::No) {
+        event->ignore();
+        return;
+    }
+
+    if (m_dataLogFile != nullptr) {
+        if (m_dataLogFile->isOpen()) {
+            m_dataLogFile->close();
+        }
+        m_dataLogFile->deleteLater();
+        m_dataLogFile = nullptr;
+    }
+
     if (m_serialPort != nullptr) {
         if (m_serialPort->isOpen()) {
             m_serialPort->close();
@@ -160,20 +197,32 @@ void MainWindow::on_serialPortReadyRead()
                     m_sleepTimer->stop();
                     m_sleepTimer->start();
 
-                    updatePlot(m_chartSeriesPackVoltage, static_cast<double>(packet.pack_voltage) / 1000.0);
-                    updatePlot(m_chartSeriesCurrent, abs(static_cast<double>(packet.current) / 1000.0));
-                    updatePlot(m_chartSeriesCharge, static_cast<double>(packet.charge_state));
-                    updatePlot(m_chartSeriesTemperature, static_cast<double>(packet.temperature) / 1000.0);
+                    qreal voltage = static_cast<qreal>(packet.pack_voltage) / 1000.0;
+                    qreal current = abs(static_cast<qreal>(packet.current) / 1000.0);
+                    qreal charge = static_cast<qreal>(packet.charge_state);
+                    qreal temperature = static_cast<qreal>(packet.temperature) / 1000.0;
+
+                    if (m_dataLogFile != nullptr && m_dataLogFile->isOpen()) {
+                        QTextStream stream(m_dataLogFile);
+                        stream << m_chartSeriesPackVoltage->count() << ",";
+                        stream << voltage << ",";
+                        stream << current << ",";
+                        stream << charge << ",";
+                        stream << temperature << "\n";
+                    }
+
+                    updatePlot(
+                        voltage,
+                        current,
+                        charge,
+                        temperature
+                        );
 
                     ui->lblPackVoltage->setText(
-                                QString("%1 V").arg(
-                                            static_cast<double>(packet.pack_voltage) / 1000.0,
-                                                5, 'f', 2));
+                                QString("%1 V").arg(voltage, 5, 'f', 2));
 
                     ui->lblCurrent->setText(
-                                QString("%1 A").arg(
-                                            static_cast<double>(packet.current) / 1000.0,
-                                                5, 'f', 2));
+                                QString("%1 A").arg(current, 5, 'f', 2));
 
                     for (int i = 0; i < 6; i++) {
                         qreal v = static_cast<qreal>(packet.cell_voltage[i]) / 1000.0;
@@ -216,30 +265,36 @@ void MainWindow::on_serialPortReadyRead()
 void MainWindow::on_sleepTimerTimeout()
 {
     m_waitingMessageBox->show();
+    m_waitingMessageBox->raise();
 }
 
 void MainWindow::on_waitingMessageBoxButtonClicked(QAbstractButton *button)
 {
-    (void)button;
-    m_serialPort->close();
-    m_serialPort->deleteLater();
-    m_serialPort = nullptr;
-    qApp->quit();
+    //close();
 }
 
-void MainWindow::updatePlot(QLineSeries *series, double value)
+void MainWindow::on_chartUpdateTimer_timeout()
 {
-//    QVector<QPointF> oldPoints = series->pointsVector();
-//    QVector<QPointF> points;
+    qreal width = m_chart->geometry().width();
 
-//    points.append(QPointF(points.count(), value));
-//    series->replace(points);
-    QVector<QPointF> points = series->pointsVector();
-    points.append(QPointF(points.count(), value));
-    series->replace(points);
+    qDebug() << "Chart Area Width:" << width;
 
-    if (points.count() > 100) {
-        m_chart->axisX()->setRange(0, points.count());
+    if (m_chartDataPackVoltage.count() > 300) {
+
+    }
+}
+
+void MainWindow::updatePlot(qreal voltage, qreal current, qreal charge, qreal temperature)
+{
+    QDateTime timestamp = QDateTime::currentDateTime();
+
+    m_chartSeriesPackVoltage->append(timestamp.toMSecsSinceEpoch(), voltage);
+    m_chartSeriesCurrent->append(timestamp.toMSecsSinceEpoch(), current);
+    m_chartSeriesCharge->append(timestamp.toMSecsSinceEpoch(), charge);
+    m_chartSeriesTemperature->append(timestamp.toMSecsSinceEpoch(), temperature);
+
+    if ((timestamp.toSecsSinceEpoch() - m_startDateTime.toSecsSinceEpoch()) > 300) {
+        m_chartAxisTime->setMax(timestamp);
     }
 }
 
@@ -250,11 +305,16 @@ void MainWindow::on_actClearData_triggered()
                 tr("Clear Data"),
                 tr("Do you really want to clear all data from the graph?"));
 
-    if (result == QMessageBox::Accepted) {
+    if (result == QMessageBox::Yes) {
+
         m_chartSeriesCharge->clear();
         m_chartSeriesPackVoltage->clear();
         m_chartSeriesCurrent->clear();
         m_chartSeriesTemperature->clear();
+
+        m_startDateTime = QDateTime::currentDateTime();
+        m_chartAxisTime->setMin(m_startDateTime);
+        m_chartAxisTime->setMax(m_startDateTime.addSecs(300));
     }
 }
 
@@ -303,4 +363,62 @@ void MainWindow::on_actShowHideTemperature_triggered(bool checked)
 {
     m_chartSeriesTemperature->setVisible(checked);
     m_chartAxisTemperature->setVisible(checked);
+}
+
+void MainWindow::on_actExit_triggered()
+{
+    close();
+}
+
+void MainWindow::on_actStartLogging_triggered()
+{
+    while (true) {
+        QString fileName = QFileDialog::getSaveFileName(
+                    this,
+                    tr("Choose a file to save data to"));
+
+        if (!fileName.isEmpty()) {
+            m_dataLogFile = new QFile(fileName);
+
+            QTextStream stream(m_dataLogFile);
+            stream << "time,voltage,current,charge,temperature\n";
+
+            if (!m_dataLogFile->open(QIODevice::WriteOnly)) {
+                int result = QMessageBox::critical(
+                            this,
+                            tr("File Error"),
+                            tr("Could not open file %1 for writing!").arg(fileName),
+                            QMessageBox::Retry | QMessageBox::Cancel);
+                if (result == QMessageBox::Cancel) {
+                    return;
+                }
+            }
+            else {
+                int result = QMessageBox::question(
+                            this,
+                            tr("Save Buffered Data"),
+                            tr("Do you want to save all data buffered so far?"),
+                            QMessageBox::Yes | QMessageBox::No);
+
+                if (result == QMessageBox::Yes) {
+                    for (int i = 0; i < m_chartSeriesPackVoltage->count(); i++) {
+                        qreal voltage = m_chartSeriesPackVoltage->at(i).y();
+                        qreal current = m_chartSeriesCurrent->at(i).y();
+                        qreal charge = m_chartSeriesCharge->at(i).y();
+                        qreal temperature = m_chartSeriesTemperature->at(i).y();
+                        stream << i << ",";
+                        stream << voltage << ",";
+                        stream << current << ",";
+                        stream << charge << ",";
+                        stream << temperature << "\n";
+                    }
+                }
+
+                return;
+            }
+        }
+        else {
+            return;
+        }
+    }
 }
