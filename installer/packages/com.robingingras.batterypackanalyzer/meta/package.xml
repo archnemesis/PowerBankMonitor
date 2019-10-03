@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package>
+    <DisplayName>Battery Pack Analyzer</DisplayName>
+    <Description>Analyze battery pack performance and perform configuration and maintenance functions.</Description>
+    <Version>1.0.0</Version>
+    <ReleaseDate>2019-10-03</ReleaseDate>
+    <Licenses>
+        <License name="MIT License" file="LICENSE" />
+    </Licenses>
+    <Default>script</Default>
+    <Script>installscript.qs</Script>
+</Package>

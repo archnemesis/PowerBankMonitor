@@ -231,20 +231,91 @@
     <property name="title">
      <string>Graph</string>
     </property>
+    <widget class="QMenu" name="menuPack_Voltage">
+     <property name="title">
+      <string>Pack Voltage</string>
+     </property>
+     <widget class="QMenu" name="mnuPackVoltageOrientation">
+      <property name="title">
+       <string>Orientation</string>
+      </property>
+      <addaction name="actPackVoltageOrientationLeft"/>
+      <addaction name="actPackVoltageOrientationRight"/>
+     </widget>
+     <addaction name="actPackVoltageShow"/>
+     <addaction name="separator"/>
+     <addaction name="actPackVoltageColor"/>
+     <addaction name="actPackVoltageRange"/>
+     <addaction name="separator"/>
+     <addaction name="mnuPackVoltageOrientation"/>
+    </widget>
+    <widget class="QMenu" name="menuCurrent">
+     <property name="title">
+      <string>Current</string>
+     </property>
+     <widget class="QMenu" name="mnuCurrentOrientation">
+      <property name="title">
+       <string>Orientation</string>
+      </property>
+      <addaction name="actCurrentOrientationLeft"/>
+      <addaction name="actCurrentOrientationRight"/>
+     </widget>
+     <addaction name="actCurrentShow"/>
+     <addaction name="separator"/>
+     <addaction name="actCurrentColor"/>
+     <addaction name="actCurrentRange"/>
+     <addaction name="separator"/>
+     <addaction name="mnuCurrentOrientation"/>
+    </widget>
+    <widget class="QMenu" name="menuCharge_Level">
+     <property name="title">
+      <string>Charge Level</string>
+     </property>
+     <widget class="QMenu" name="mnuChargeOrientation">
+      <property name="title">
+       <string>Orientation</string>
+      </property>
+      <addaction name="actChargeOrientationLeft"/>
+      <addaction name="actChargeOrientationRight"/>
+     </widget>
+     <addaction name="actChargeShow"/>
+     <addaction name="separator"/>
+     <addaction name="actChargeColor"/>
+     <addaction name="actChargeRange"/>
+     <addaction name="separator"/>
+     <addaction name="mnuChargeOrientation"/>
+    </widget>
+    <widget class="QMenu" name="menuTemperature">
+     <property name="title">
+      <string>Temperature</string>
+     </property>
+     <widget class="QMenu" name="mnuTemperatureOrientation">
+      <property name="title">
+       <string>Orientation</string>
+      </property>
+      <addaction name="actTemperatureOrientationLeft"/>
+      <addaction name="actTemperatureOrientationRight"/>
+     </widget>
+     <addaction name="actTemperatureShow"/>
+     <addaction name="separator"/>
+     <addaction name="actTemperatureColor"/>
+     <addaction name="actTemperatureRange"/>
+     <addaction name="separator"/>
+     <addaction name="mnuTemperatureOrientation"/>
+    </widget>
     <addaction name="actClearData"/>
     <addaction name="separator"/>
-    <addaction name="actShowHidePackVoltage"/>
-    <addaction name="actShowHideCurrent"/>
-    <addaction name="actShowHideChargeLevel"/>
-    <addaction name="actShowHideTemperature"/>
-    <addaction name="separator"/>
-    <addaction name="actionSettings"/>
+    <addaction name="menuPack_Voltage"/>
+    <addaction name="menuCurrent"/>
+    <addaction name="menuCharge_Level"/>
+    <addaction name="menuTemperature"/>
    </widget>
    <widget class="QMenu" name="menuView">
     <property name="title">
      <string>View</string>
     </property>
     <addaction name="actCellBalancing"/>
+    <addaction name="actViewSettings"/>
    </widget>
    <widget class="QMenu" name="menuFile">
     <property name="title">
@@ -253,13 +324,18 @@
     <addaction name="actStartLogging"/>
     <addaction name="actStopLogging"/>
     <addaction name="separator"/>
-    <addaction name="actSaveCurrentView"/>
-    <addaction name="separator"/>
     <addaction name="actExit"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="actAbout"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="mnuGraph"/>
    <addaction name="menuView"/>
+   <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actSaveData">
@@ -279,51 +355,7 @@
   </action>
   <action name="actCellBalancing">
    <property name="text">
-    <string>Cell Balancing...</string>
-   </property>
-  </action>
-  <action name="actShowHidePackVoltage">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="checked">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Pack Voltage</string>
-   </property>
-  </action>
-  <action name="actShowHideCurrent">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="checked">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Current</string>
-   </property>
-  </action>
-  <action name="actShowHideChargeLevel">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="checked">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Charge Level</string>
-   </property>
-  </action>
-  <action name="actShowHideTemperature">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="checked">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Temperature</string>
+    <string>Cell Monitor...</string>
    </property>
   </action>
   <action name="actionSettings">
@@ -349,6 +381,184 @@
   <action name="actExit">
    <property name="text">
     <string>Exit</string>
+   </property>
+  </action>
+  <action name="actPackVoltageShow">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show</string>
+   </property>
+  </action>
+  <action name="actPackVoltageColor">
+   <property name="text">
+    <string>Color...</string>
+   </property>
+  </action>
+  <action name="actPackVoltageRange">
+   <property name="text">
+    <string>Range...</string>
+   </property>
+  </action>
+  <action name="actPackVoltageOrientationLeft">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Left</string>
+   </property>
+  </action>
+  <action name="actPackVoltageOrientationRight">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Right</string>
+   </property>
+  </action>
+  <action name="actCurrentShow">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show</string>
+   </property>
+  </action>
+  <action name="actCurrentColor">
+   <property name="text">
+    <string>Color...</string>
+   </property>
+  </action>
+  <action name="actCurrentRange">
+   <property name="text">
+    <string>Range...</string>
+   </property>
+  </action>
+  <action name="actCurrentOrientationLeft">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Left</string>
+   </property>
+  </action>
+  <action name="actCurrentOrientationRight">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Right</string>
+   </property>
+  </action>
+  <action name="actChargeRange_2">
+   <property name="text">
+    <string>Range...</string>
+   </property>
+  </action>
+  <action name="actChargeShow">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show</string>
+   </property>
+  </action>
+  <action name="actChargeColor">
+   <property name="text">
+    <string>Color...</string>
+   </property>
+  </action>
+  <action name="actChargeRange">
+   <property name="text">
+    <string>Range...</string>
+   </property>
+  </action>
+  <action name="actChargeOrientationLeft">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Left</string>
+   </property>
+  </action>
+  <action name="actChargeOrientationRight">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Right</string>
+   </property>
+  </action>
+  <action name="actTemperatureShow">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show</string>
+   </property>
+  </action>
+  <action name="actTemperatureColor">
+   <property name="text">
+    <string>Color...</string>
+   </property>
+  </action>
+  <action name="actTemperatureRange">
+   <property name="text">
+    <string>Range...</string>
+   </property>
+  </action>
+  <action name="actTemperatureOrientationLeft">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Left</string>
+   </property>
+  </action>
+  <action name="actTemperatureOrientationRight">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Right</string>
+   </property>
+  </action>
+  <action name="actViewSettings">
+   <property name="text">
+    <string>Settings...</string>
+   </property>
+  </action>
+  <action name="actAbout">
+   <property name="text">
+    <string>About...</string>
    </property>
   </action>
  </widget>

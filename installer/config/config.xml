@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Installer>
+    <Name>Battery Pack Analyzer</Name>
+    <Version>1.0.0</Version>
+    <Title>Battery Pack Analyzer Installer</Title>
+    <Publisher>Robin Gingras</Publisher>
+    <StartMenuDir>Battery Pack Analyzer</StartMenuDir>
+    <TargetDir>@ApplicationsDirX64@/Battery Pack Analyzer</TargetDir>
+</Installer>

@@ -10,7 +10,7 @@ include (C:/Qwt-6.1.4/features/qwt.prf)
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = PowerBankMonitor
+TARGET = BatteryPackAnalyzer
 TEMPLATE = app
 
 # The following define makes your compiler emit warnings if you use
@@ -30,20 +30,32 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     selectserialportdialog.cpp \
-    cellmonitordialog.cpp
+    cellmonitordialog.cpp \
+    settingsdialog.cpp \
+    aboutdialog.cpp
 
 HEADERS += \
         mainwindow.h \
     selectserialportdialog.h \
     statuspacket.h \
-    cellmonitordialog.h
+    cellmonitordialog.h \
+    settingsdialog.h \
+    aboutdialog.h
 
 FORMS += \
         mainwindow.ui \
     selectserialportdialog.ui \
-    cellmonitordialog.ui
+    cellmonitordialog.ui \
+    settingsdialog.ui \
+    aboutdialog.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+DISTFILES += \
+    installer/config/config.xml \
+    installer/packages/com.robingingras.batterypackanalyzer/meta/package.xml \
+    LICENSE \
+    installer/packages/com.robingingras.batterypackanalyzer/meta/installscript.qs
